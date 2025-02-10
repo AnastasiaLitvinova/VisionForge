@@ -23,6 +23,7 @@ def set_seed(seed=42):
 
 
 if __name__ == '__main__':
+    num_epochs = 5
     # Функция objective для Optuna
     def objective(trial):
         # Значения для гиперпараметров
@@ -40,7 +41,7 @@ if __name__ == '__main__':
             model_name="ResNet34",
             learning_rate=lr,
             batch_size=batch_size,
-            num_epochs=5,
+            num_epochs=num_epochs,
             weight_decay=weight_decay,
             step_size=step_size,
             gamma=gamma,
@@ -84,7 +85,7 @@ if __name__ == '__main__':
         model_name="ResNet34",
         learning_rate=trial.params['learning_rate'],
         batch_size=trial.params['batch_size'],
-        num_epochs=trial.params['num_epochs'],
+        num_epochs=num_epochs,
         weight_decay=trial.params['weight_decay'],
         step_size=trial.params['step_size'],
         gamma=trial.params['gamma'],
