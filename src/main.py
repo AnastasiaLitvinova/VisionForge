@@ -3,12 +3,12 @@ import optuna
 import random
 import numpy as np
 
-from src.models.resnet import create_resnet34
-from src.utils.data_loading import load_and_preprocess_data
-from src.utils.training import train_model
-from src.utils.evaluation import evaluate_model
-from src.utils.visualization import plot_training_history
-from src.utils.experiment_config import Experiment, ExperimentSettings
+from .models.resnet import create_resnet34
+from .utils.data_loading import load_and_preprocess_data
+from .utils.training import train_model
+from .utils.evaluation import evaluate_model
+from .utils.visualization import plot_training_history
+from .utils.experiment_config import Experiment, ExperimentSettings
 
 # Установка seed для воспроизводимости
 def set_seed(seed=42):
