@@ -9,12 +9,12 @@ class ExperimentSettings:
     """Содержит все параметры, описывающие эксперимент."""
     experiment_name: str = "baseline"
     model_name: str = "ResNet34"
-    learning_rate: float
+    learning_rate: float = 0.001
     batch_size: int = 32
-    num_epochs: int
-    weight_decay: float
-    step_size: int
-    gamma: float
+    num_epochs: int = 5
+    weight_decay: float = 0.0005
+    step_size: int = 7
+    gamma: float = 0.1
     random_seed: int = 42
     pretrained: bool = True
 
