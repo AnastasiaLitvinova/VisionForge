@@ -6,8 +6,12 @@ from torchvision.models.resnet import ResNet34_Weights
 
 def create_resnet34(pretrained=True, device="cpu", num_classes=10):
     """Создает и переносит ResNet34 модель на указанное устройство."""
-    weights = ResNet34_Weights.DEFAULT if pretrained else None  # Correct usage
-    model = models.resnet34(pretrained=pretrained, weights=weights)
+    if pretrained:
+        weights = ResNet34_Weights.DEFAULT # Или другой вариант, например, IMAGENET1K_V1
+    else:
+        weights = None
+
+    model = models.resnet34(weights=weights)
 
     # Заменяем последний слой (fc) для классификации на нужное количество классов
     num_ftrs = model.fc.in_features
