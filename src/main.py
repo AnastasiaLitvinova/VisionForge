@@ -23,7 +23,7 @@ def set_seed(seed=42):
 
 
 if __name__ == '__main__':
-    num_epochs = 5
+    num_epochs = 20
     # Функция objective для Optuna
     def objective(trial):
         # Значения для гиперпараметров
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     study = optuna.create_study(direction="maximize", pruner=optuna.pruners.SuccessiveHalvingPruner())
 
     # Запустить оптимизацию (n_trials - количество экспериментов)
-    study.optimize(objective, n_trials=11)
+    study.optimize(objective, n_trials=23)
 
     # Вывод результатов
     print("Number of finished trials: {}".format(len(study.trials)))
