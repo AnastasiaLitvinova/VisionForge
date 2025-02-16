@@ -19,7 +19,7 @@ def main():
     st.title("CIFAR-10 Image Classifier")
 
     # Load the model
-    model_path = "../saved_models/model.pth"
+    model_path = "saved_models/model.pth"
     model = load_model(model_path)
 
     # Sidebar for image selection
