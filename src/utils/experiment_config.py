@@ -8,10 +8,10 @@ from torch import save as torch_save
 class ExperimentSettings:
     """Содержит все параметры, описывающие эксперимент."""
     experiment_name: str = "baseline"
-    model_name: str = "ResNet34"
+    model_name: str = "ResNet18"
     learning_rate: float = 0.001
     batch_size: int = 32
-    num_epochs: int = 5
+    num_epochs: int = 60
     weight_decay: float = 0.0005
     step_size: int = 7
     gamma: float = 0.1

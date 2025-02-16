@@ -1,29 +1,16 @@
 import torch
 import optuna
-import random
-import numpy as np
 
-from .models.resnet import create_resnet34
+from .models.resnet import create_resnet18
 from .utils.data_loading import load_and_preprocess_data
 from .utils.training import train_model
 from .utils.evaluation import evaluate_model
 from .utils.visualization import plot_training_history
 from .utils.experiment_config import Experiment, ExperimentSettings
 
-# Установка seed для воспроизводимости
-def set_seed(seed=42):
-    torch.manual_seed(seed)
-    np.random.seed(seed)
-    random.seed(seed)
-    if torch.cuda.is_available():
-        torch.cuda.manual_seed(seed)
-        torch.cuda.manual_seed_all(seed)
-        torch.backends.cudnn.deterministic = True
-        torch.backends.cudnn.benchmark = False
-
 
 if __name__ == '__main__':
-    num_epochs = 20
+    num_epochs = 30
     # Функция objective для Optuna
     def objective(trial):
         # Значения для гиперпараметров
@@ -38,7 +25,7 @@ if __name__ == '__main__':
         # Обновить ExperimentSettings с предложенными значениями
         settings = ExperimentSettings(
             experiment_name=f"OptunaTrial_{trial.number}",
-            model_name="ResNet34",
+            model_name="ResNet18",
             learning_rate=lr,
             batch_size=batch_size,
             num_epochs=num_epochs,
@@ -54,7 +41,7 @@ if __name__ == '__main__':
 
         # Создать модель
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        model = create_resnet34(settings.pretrained, device)
+        model = create_resnet18(settings.pretrained, device)
 
         # Обучить модель
         trained_model, history_df = train_model(model, trainloader, valloader, settings.learning_rate, settings.weight_decay, settings.step_size, settings.gamma, settings.num_epochs, device, settings.random_seed)
@@ -68,7 +55,7 @@ if __name__ == '__main__':
     study = optuna.create_study(direction="maximize", pruner=optuna.pruners.SuccessiveHalvingPruner())
 
     # Запустить оптимизацию (n_trials - количество экспериментов)
-    study.optimize(objective, n_trials=23)
+    study.optimize(objective, n_trials=15)
 
     # Вывод результатов
     print("Number of finished trials: {}".format(len(study.trials)))
@@ -82,7 +69,7 @@ if __name__ == '__main__':
     # Получаем лучшие гиперпараметры из Optuna
     best_settings = ExperimentSettings(
         experiment_name="BestExperiment",
-        model_name="ResNet34",
+        model_name="ResNet18",
         learning_rate=trial.params['learning_rate'],
         batch_size=trial.params['batch_size'],
         num_epochs=num_epochs,
@@ -98,7 +85,7 @@ if __name__ == '__main__':
 
     # Создаем модель с лучшими гиперпараметрами
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    best_model = create_resnet34(best_settings.pretrained, device)
+    best_model = create_resnet18(best_settings.pretrained, device)
 
     # Обучаем модель с лучшими гиперпараметрами
     trained_model, history_df = train_model(best_model, trainloader, valloader, best_settings.learning_rate, best_settings.weight_decay, best_settings.step_size, best_settings.gamma, best_settings.num_epochs, device, best_settings.random_seed)

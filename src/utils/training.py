@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.optim import lr_scheduler
-from tqdm import tqdm
 import pandas as pd
 from optuna.exceptions import TrialPruned
 
@@ -37,7 +36,7 @@ def train_model(
 
     history = {"loss": [], "accuracy": [], "val_loss": [], "val_accuracy": []}
     best_val_accuracy = 0.0
-    best_model_state = None  # Сохраняем состояние лучшей модели
+    best_model_state = None  # Сохранить состояние лучшей модели
     patience = 3  # Количество эпох без улучшений для early stopping
     trigger = False
     last_loss = float('inf') # последний loss
@@ -47,8 +46,7 @@ def train_model(
         running_loss = 0.0
         correct_predictions = 0
         total_samples = 0
-        loop = tqdm(enumerate(trainloader, 0), total=len(trainloader), desc=f"Epoch {epoch+1}/{num_epochs}")
-        for i, data in loop:
+        for i, data in enumerate(trainloader, 0):
             inputs, labels = data[0].to(device), data[1].to(device)
 
             optimizer.zero_grad()
@@ -61,7 +59,6 @@ def train_model(
             accuracy = calculate_accuracy(outputs, labels)
             correct_predictions += accuracy * labels.size(0)
             total_samples += labels.size(0)
-            loop.set_postfix(loss=running_loss/(i+1), accuracy=correct_predictions/total_samples)
 
         scheduler.step()
         epoch_loss = running_loss / len(trainloader)
