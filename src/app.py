@@ -65,7 +65,7 @@ def main():
                                                         download=True, transform=transforms.ToTensor())
 
         if st.sidebar.button("Get Random Image"):  # Button press is necessary to trigger dataset loading
-            image, label = get_random_cifar10_image(cifar10_dataset)
+            image, _ = get_random_cifar10_image(cifar10_dataset)
             image = transforms.ToPILImage()(image)  # Convert back to PIL for display
 
 

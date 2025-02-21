@@ -1,20 +1,23 @@
 import torch
 
+from utils.experiment_config import settings
 
-def evaluate_model(model, testloader, device="cpu"):
-    """Оценивает модель на тестовом наборе и возвращает точность."""
+
+def evaluate(
+    model: torch.nn.Module,
+    test_loader: torch.utils.data.DataLoader,
+    device: torch.device = settings.device,
+) -> tuple[list[int], list[int]]:
+    """Evaluate a model on a given test dataset."""
     model.eval()
-    test_correct_predictions = 0
-    test_total_samples = 0
+    true_labels = []
+    predicted_labels = []
     with torch.no_grad():
-        for data in testloader:
-            inputs, labels = data[0].to(device), data[1].to(device)
-            outputs = model(inputs)
-            _, predicted = torch.max(outputs.data, 1)
-            correct = (predicted == labels).sum().item()
-            test_correct_predictions += correct
-            test_total_samples += len(labels)
+        for images, labels in test_loader:
+            images, labels = images.to(device), labels.to(device)
+            outputs = model(images)
+            _, predicted = torch.max(outputs, 1)
+            true_labels.extend(labels.cpu().numpy())
+            predicted_labels.extend(predicted.cpu().numpy())
 
-    test_accuracy = test_correct_predictions / test_total_samples
-    print(f"Test Accuracy: {test_accuracy:.4f}")
-    return test_accuracy
+    return true_labels, predicted_labels
