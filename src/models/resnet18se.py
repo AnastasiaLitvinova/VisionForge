@@ -3,7 +3,7 @@ import torch.nn as nn
 import torchvision.models as models
 from torchvision.models.resnet import ResNet18_Weights
 
-from utils.experiment_config import settings
+from ..utils.experiment_config import settings
 
 
 class SEBlock(nn.Module):
