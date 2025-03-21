@@ -6,6 +6,11 @@ from PIL import Image
 import io
 import requests
 import ssl
+import sys
+from pathlib import Path
+
+project_root = Path(__file__).parent.parent
+sys.path.append(str(project_root))
 
 # Import the functions from predict.py
 from predict import load_model, transform_image, predict_image, get_random_cifar10_image
