@@ -50,6 +50,8 @@ class ResNet18SE(nn.Module):
 
         # Move the model to the specified device
         self.resnet.to(device)
+        if torch.__version__ >= "2.0":  # Use torch.compile() for optimization
+            self.resnet = torch.compile(self.resnet)
 
     def _add_attention(self, layer: nn.ModuleList, channel: int) -> nn.ModuleList:
         """Adds SE blocks after each convolutional block in a ResNet layer."""
