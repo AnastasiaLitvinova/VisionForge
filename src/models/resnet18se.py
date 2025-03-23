@@ -3,8 +3,6 @@ import torch.nn as nn
 import torchvision.models as models
 from torchvision.models.resnet import ResNet18_Weights
 
-from ..utils.experiment_config import settings
-
 
 class SEBlock(nn.Module):
     def __init__(self, channel: int, reduction: int = 16) -> None:
@@ -27,7 +25,7 @@ class SEBlock(nn.Module):
 class ResNet18SE(nn.Module):
     def __init__(
         self,
-        device: torch.device = settings.device,
+        device: torch.device = torch.device("cpu"),
         pretrained: bool = True,
         num_classes: int = 10
     ) -> None:
