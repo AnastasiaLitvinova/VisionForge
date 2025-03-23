@@ -3,7 +3,7 @@ import torch
 from utils.experiment_config import settings
 
 
-def evaluate(
+def evaluate_model(
     model: torch.nn.Module,
     test_loader: torch.utils.data.DataLoader,
     device: torch.device = settings.device,
