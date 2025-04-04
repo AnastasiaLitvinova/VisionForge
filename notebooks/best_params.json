@@ -1,0 +1,8 @@
+{
+    "lr": 6.5945635866259e-05,
+    "batch_size": 32,
+    "wd": 0.00011469106617371565,
+    "epochs": 14,
+    "patience": 5,
+    "num_layers_to_unfreeze": 3
+}
