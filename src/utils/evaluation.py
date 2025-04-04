@@ -1,13 +1,13 @@
 import torch
+from torch.utils.data import DataLoader
+from typing import Tuple, List
 
-from utils.experiment_config import settings
 
-
-def evaluate_model(
+def evaluate_test(
     model: torch.nn.Module,
-    test_loader: torch.utils.data.DataLoader,
-    device: torch.device = settings.device,
-) -> tuple[list[int], list[int]]:
+    test_loader: DataLoader,
+    device: torch.device,
+) -> Tuple[List[int], List[int]]:
     """Evaluate a model on a given test dataset."""
     model.eval()
     true_labels = []

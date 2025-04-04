@@ -38,11 +38,8 @@ class ResNet18SE(nn.Module):
         for param in self.resnet.parameters():
             param.requires_grad = False
 
-        # Replace the first layer to add SE blocks after each convolutional block
-        self.resnet.layer1 = self._add_attention(self.resnet.layer1, 64)
-        self.resnet.layer2 = self._add_attention(self.resnet.layer2, 128)
-        self.resnet.layer3 = self._add_attention(self.resnet.layer3, 256)
-        self.resnet.layer4 = self._add_attention(self.resnet.layer4, 512)
+        # Add SE blocks after each convolutional block
+        self._add_se_blocks()
 
         # Replace the final fully connected layer
         num_ftrs = self.resnet.fc.in_features
@@ -53,13 +50,20 @@ class ResNet18SE(nn.Module):
         if torch.__version__ >= "2.0":  # Use torch.compile() for optimization
             self.resnet = torch.compile(self.resnet)
 
-    def _add_attention(self, layer: nn.ModuleList, channel: int) -> nn.ModuleList:
-        """Adds SE blocks after each convolutional block in a ResNet layer."""
-        modules = []
-        for block in layer:
-            modules.append(block)
-            modules.append(SEBlock(channel))
-        return nn.Sequential(*modules)
+    def _add_se_blocks(self) -> None:
+        """Adds SE blocks after each convolutional block."""
+        channels = [64, 128, 256, 512]
+        for i, (layer, channel) in enumerate(zip(
+            (self.resnet.layer1, self.resnet.layer2, self.resnet.layer3, self.resnet.layer4), channels)):
+            layer.add_module(f"{i}_se", SEBlock(channel))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.resnet(x)
+
+    def unfreeze_layers(self, num_layers: int) -> None:
+        """Unfreezes the last num_layers layers for fine-tuning."""
+        layers = [self.resnet.layer1, self.resnet.layer2,
+                  self.resnet.layer3, self.resnet.layer4]
+        for layer in layers[-num_layers:]:
+            for param in layer.parameters():
+                param.requires_grad = True
