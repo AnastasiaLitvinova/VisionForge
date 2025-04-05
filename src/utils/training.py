@@ -4,7 +4,6 @@ from torch.utils.data import DataLoader
 from typing import List, Tuple
 import torch.optim as optim
 from torch.optim.lr_scheduler import ReduceLROnPlateau
-import wandb
 
 
 class ModelTrainer:
@@ -24,13 +23,6 @@ class ModelTrainer:
                                lr=learning_rate, weight_decay=weight_decay)
         scheduler = ReduceLROnPlateau(
             optimizer, mode='max', factor=0.1, patience=patience // 2, min_lr=0)
-
-        wandb.init(project="cifar10-optuna", config={
-            "learning_rate": learning_rate,
-            "epochs": num_epochs,
-            "batch_size": trainloader.batch_size,
-            "weight_decay": weight_decay
-        })
 
         train_losses = []
         val_accuracies = []
@@ -55,12 +47,10 @@ class ModelTrainer:
             train_losses.append(train_loss)
             print(
                 f"Epoch {epoch+1}/{num_epochs}, Training Loss: {train_loss:.4f}")
-            wandb.log({"train_loss": train_loss})
 
             # Evaluate on validation set
             val_accuracy = self.evaluate(valloader)
             val_accuracies.append(val_accuracy)
-            wandb.log({"val_accuracy": val_accuracy})
 
             # Early stopping
             if val_accuracy > best_val_accuracy:
@@ -77,7 +67,6 @@ class ModelTrainer:
 
             scheduler.step(val_accuracy)
             current_lr = scheduler.get_last_lr()[0]
-            wandb.log({"lr": current_lr})
             if current_lr < learning_rate:
                 print(f"Learning rate reduced to: {current_lr}")
 
