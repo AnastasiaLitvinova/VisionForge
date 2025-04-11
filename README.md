@@ -6,12 +6,7 @@
 
 Классификатор изображений CIFAR-10 на базе PyTorch с использованием **ResNet18**, расширенной SE-блоками. Модель обучена в Google Colab (GPU), а затем развернута как интерактивное веб-приложение через Streamlit.
 
-<figure>
-    <img src="data/example.png?raw=true" loading="lazy" alt="Example of Streamlit application" width="700px">
-    <figcaption>
-        <b>Пример:</b> Скриншот Streamlit приложения.
-    </figcaption>
-</figure>
+<img src="./data/example.png?raw=true" data-image-id="114363" data-image-name="1-1.jpg" width="46%" loading="lazy" class="image reset"><img src="./data/example.gif?raw=true" data-image-id="114370" data-image-name="2-1.jpg" width="49%" loading="lazy" class="image reset">
 
 ## 🎯 Цель проекта
 
